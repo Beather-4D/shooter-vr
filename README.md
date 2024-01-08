@@ -1,4 +1,4 @@
-# Cours Programmation VR
+# Projet Programmation VR
+# Shooter VR
 
-Projet de base pour suivre le cours de Programmation VR, à destination des étudiants 4A VR de l'ESIEA Laval.
-Ce projet servira aussi de base au TP.
+Projet du cours de programmation VR, dont le sujet est un jeu de type shooter
