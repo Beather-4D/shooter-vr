@@ -8,37 +8,20 @@ public class ZombieScript : MonoBehaviour
 {
     public Animator zombieAnimator;
     public GameObject player;
+    public PlayerScript playerScript;
 
     public int zombieHealth = 10;
+    public int zombieDamage = 10;
     public float zombieSpeed = 0;
     public float zombieAcceleration = 0.03f;
     public float zombieMaxSpeed = 1.5f;
-    public bool isBiting = false;
+    private bool isBiting = false;
     
     private NavMeshAgent agent;
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
     }
-
-    /*
-    private void Update()
-    {
-        transform.LookAt(player.transform);
-        if (Vector3.Distance(player.transform.position, transform.position) < 0.3f) 
-        {
-            zombieSpeed = 0;
-            zombieAnimator.SetTrigger("bite");
-            player.GetComponent<PlayerScript>().dealDamage(10);
-        }
-        else if (zombieSpeed < zombieMaxSpeed)
-        {
-            zombieSpeed += zombieAcceleration * Time.deltaTime;
-            zombieAnimator.SetFloat("speed", zombieSpeed);
-        }
-        transform.Translate(Vector3.forward * Time.deltaTime * zombieSpeed);
-    }
-    */
 
     private void Update()
     {
@@ -47,8 +30,11 @@ public class ZombieScript : MonoBehaviour
         if (Vector3.Distance(player.transform.position, transform.position) < 0.3f)
         {
             zombieSpeed = 0;
-            zombieAnimator.SetTrigger("bite");
-            player.GetComponent<PlayerScript>().dealDamage(10);
+            if (!isBiting){
+                StartCoroutine(BitePlayer());
+            }
+            
+           
         }
         else if (zombieSpeed < zombieMaxSpeed)
         {
@@ -59,6 +45,14 @@ public class ZombieScript : MonoBehaviour
         
     }
 
+    IEnumerator BitePlayer()
+    {
+        isBiting = true;
+        zombieAnimator.SetTrigger("bite");
+        playerScript.DealDamage(zombieDamage);
+        yield return new WaitForSeconds(3);
+        isBiting = false;
+    }
 
     public void TakeDamage(int damage)
     {
@@ -67,7 +61,7 @@ public class ZombieScript : MonoBehaviour
         if (zombieHealth <= 0)
         {
             Destroy(gameObject);
-            player.GetComponent<PlayerScript>().addMoney(10);
+            playerScript.AddMoney(10);
         }
     }
 

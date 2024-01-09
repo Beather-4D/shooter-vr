@@ -8,6 +8,7 @@ public class PlayerScript : MonoBehaviour
     public int money = 0;
     private int[] inventoryConsummable = {0,0};
     private int[] inventoryAmmo = {0,0};
+    public GameManager gameManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,16 +21,16 @@ public class PlayerScript : MonoBehaviour
         
     }
 
-    public void dealDamage(int damage)
+    public void DealDamage(int damage)
     {
         health -= damage;
         if(health <= 0)
         {
-            
+            gameManager.EndGame(false);
         }
     }
 
-    public void addMoney(int money)
+    public void AddMoney(int money)
     {
         money += money;
     }

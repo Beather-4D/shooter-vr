@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class GunScript: MonoBehaviour
 {
@@ -11,6 +14,7 @@ public class GunScript: MonoBehaviour
     public int ammoMax = 10;
     public int ammo = 10;  
     public TMP_Text ammoIndicator;
+    public XRSocketInteractor socket;
 
     Vector3 bulletOffset = new Vector3(90, 0, 0);
     Quaternion bulletRotOffset;
@@ -46,6 +50,7 @@ public class GunScript: MonoBehaviour
         ammo = ammoMax;
         ammoIndicator.text = ammo.ToString();
         ammoIndicator.color = new Color(139, 255, 0);
+        Destroy(socket.GetOldestInteractableSelected().transform.gameObject, 1);
+        
     }
-
 }
