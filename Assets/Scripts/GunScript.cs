@@ -9,6 +9,10 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class GunScript: MonoBehaviour
 {
+    private AudioSource audioSource;
+    public AudioClip[] reloadSounds;
+    public AudioClip[] fireSounds;
+
     public GameObject bulletSpawnPoint;
     public GameObject bulletPrefab;
     public int ammoMax = 10;
@@ -22,6 +26,7 @@ public class GunScript: MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         bulletRotOffset = Quaternion.Euler(bulletOffset);
     }
 
@@ -30,6 +35,8 @@ public class GunScript: MonoBehaviour
         if (ammo > 0)
         {
             GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.transform.position, bulletSpawnPoint.transform.rotation);
+            PlayShootAudio();
+
             bullet.GetComponent<BulletScript>().damage = 5;
             ammo -= 1;
             ammoIndicator.text = ammo.ToString();
@@ -48,9 +55,29 @@ public class GunScript: MonoBehaviour
     public void RechargeGun()
     {
         ammo = ammoMax;
+        PlayReloadAudio();
         ammoIndicator.text = ammo.ToString();
         ammoIndicator.color = new Color(139, 255, 0);
         Destroy(socket.GetOldestInteractableSelected().transform.gameObject, 1);
         
+    }
+
+    private void PlayShootAudio()
+    {
+        audioSource.clip = fireSounds[UnityEngine.Random.Range(0, fireSounds.Length)];
+        SetupOtherParamsAndPlay(.25f, .2f);
+    }
+
+    private void PlayReloadAudio()
+    {
+        audioSource.clip = reloadSounds[UnityEngine.Random.Range(0, reloadSounds.Length)];
+        SetupOtherParamsAndPlay(.25f, .2f);
+    }
+
+    private void SetupOtherParamsAndPlay(float volumeRange, float pitchRange)
+    {
+        audioSource.volume = UnityEngine.Random.Range(1 - volumeRange, 1);
+        audioSource.pitch = UnityEngine.Random.Range(1 - pitchRange, 1 + pitchRange);
+        audioSource.PlayOneShot(audioSource.clip);
     }
 }
