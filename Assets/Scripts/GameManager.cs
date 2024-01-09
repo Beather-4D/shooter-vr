@@ -10,5 +10,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("GameScene");
     }
 
-
+    public void EndGame(bool success)
+    {
+        Time.timeScale = 0;
+    }
 }
