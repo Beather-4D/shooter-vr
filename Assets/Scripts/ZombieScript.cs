@@ -27,9 +27,6 @@ public class ZombieScript : MonoBehaviour
     public AudioClip[] eatSounds;
     public AudioClip[] footstepsSounds;
     public AudioClip[] shotSounds;
-    //public AudioClip[] vocalsSounds;
-
-    public ParticleSystem bloodSplashParticles;
 
 
     private void Awake()
@@ -84,7 +81,6 @@ public class ZombieScript : MonoBehaviour
         {
             PlayDeathShotAudio();
             PlayBloadSplashAudio();
-            bloodSplashParticles.Play();
 
             SkinnedMeshRenderer mesh = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
             mesh.enabled = false;
