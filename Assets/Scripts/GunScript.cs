@@ -12,6 +12,7 @@ public class GunScript: MonoBehaviour
     private AudioSource audioSource;
     public AudioClip[] reloadSounds;
     public AudioClip[] fireSounds;
+    public AudioClip emptyAmmoSound;
 
     public GameObject bulletSpawnPoint;
     public GameObject bulletPrefab;
@@ -42,14 +43,17 @@ public class GunScript: MonoBehaviour
             ammoIndicator.text = ammo.ToString();
             if(ammo == 3)
             {
-                ammoIndicator.color = new Color(255, 165, 0); 
+                ammoIndicator.color = new Color(139, 255, 0); 
             }
             if (ammo == 0)
             {
                 ammoIndicator.color = Color.red;
             }
         }
-        
+        else
+        {
+            PlayEmptyAmmoAudio();
+        }
     }
 
     public void RechargeGun()
@@ -57,7 +61,7 @@ public class GunScript: MonoBehaviour
         ammo = ammoMax;
         PlayReloadAudio();
         ammoIndicator.text = ammo.ToString();
-        ammoIndicator.color = new Color(139, 255, 0);
+        ammoIndicator.color = Color.green;
         Destroy(socket.GetOldestInteractableSelected().transform.gameObject, 1);
         
     }
@@ -71,6 +75,12 @@ public class GunScript: MonoBehaviour
     private void PlayReloadAudio()
     {
         audioSource.clip = reloadSounds[UnityEngine.Random.Range(0, reloadSounds.Length)];
+        SetupOtherParamsAndPlay(.25f, .2f);
+    }
+
+    private void PlayEmptyAmmoAudio()
+    {
+        audioSource.clip = emptyAmmoSound;
         SetupOtherParamsAndPlay(.25f, .2f);
     }
 

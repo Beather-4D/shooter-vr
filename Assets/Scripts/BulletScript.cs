@@ -25,20 +25,15 @@ public class BulletScript : MonoBehaviour
 
             if (distance < 0.3f)
             {
-                Debug.Log(hit.transform.name);
-
                 ZombieScript zombie = hit.transform.GetComponent<ZombieScript>();
 
                 if (zombie != null)
                 {
                     zombie.TakeDamage(damage);
                     Destroy(gameObject);
-
                 }
             }
             
         }
     }
-
-
 }

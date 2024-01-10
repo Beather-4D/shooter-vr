@@ -13,8 +13,20 @@ public class GameManager : MonoBehaviour
     private bool isPaused = false;
     private bool isEnded = false;
     public GameObject endMenu;
-    public Light light;
+    public GameObject lightGameObj;
+    private Light light;
 
+    private AudioSource audioSource;
+    public AudioClip[] playerDeathSounds;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        light = lightGameObj.GetComponent<Light>();
+    }
+
+
+    //MAPPING
     private void OnEnable()
     {
         menuAction.action.performed += PauseManager;
@@ -28,6 +40,7 @@ public class GameManager : MonoBehaviour
         menuAction.action.Disable();
     }
 
+    //GAME STATUS
     public void PauseManager(InputAction.CallbackContext obj)
     {
         if (isPaused){
@@ -47,14 +60,20 @@ public class GameManager : MonoBehaviour
         isEnded = true;
         Time.timeScale = 0;
         endMenu.GetComponent<Canvas>().enabled = true;
+        PlayerScript playerScript = GameObject.FindWithTag("Player").GetComponent<PlayerScript>();
         if (!success)
         {
             //TODO Menu text + score
-            endMenu.transform.Find("Score").GetComponent<TMP_Text>().text = "Test";
+            endMenu.transform.Find("Score").GetComponent<TMP_Text>().text = "You Died\nScore : " + playerScript.GetMoney().ToString();
+            endMenu.transform.Find("Score").GetComponent<TMP_Text>().color = Color.red;
             light.color = Color.red;
+            PlayPlayerDeathAudio();
         } else
         {
             //TODO Menu text + score
+            int score = playerScript.GetMoney() + 100;  
+            endMenu.transform.Find("Score").GetComponent<TMP_Text>().text = "You Escaped\nScore : " + score.ToString();
+            endMenu.transform.Find("Score").GetComponent<TMP_Text>().color = Color.yellow;
             light.color = Color.yellow;
         }
     }
@@ -94,4 +113,14 @@ public class GameManager : MonoBehaviour
         #endif
         Application.Quit();
     }
+
+    private void PlayPlayerDeathAudio()
+    {
+        audioSource.clip = playerDeathSounds[UnityEngine.Random.Range(0, playerDeathSounds.Length)];
+        audioSource.volume = UnityEngine.Random.Range(1 - .25f, 1);
+        audioSource.pitch = UnityEngine.Random.Range(1 - .2f, 1 + .2f);
+
+        audioSource.PlayOneShot(audioSource.clip);
+    }
+
 }
