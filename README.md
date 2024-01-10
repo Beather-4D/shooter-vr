@@ -13,3 +13,6 @@ Afin de gagner le jeu, il vous faut accumuler 200$, afin de monter à bord du ca
   Saisie : Hand Trigger
   Tirer : Index Trigger
   Pause/Play : Start Button (Left)
+
+## Source code : 
+https://github.com/Beather-4D/shooter-vr
